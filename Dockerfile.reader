@@ -1,0 +1,13 @@
+# Dockerfile.reader
+FROM alpine:3.20
+
+# Crear la carpeta de datos
+RUN mkdir -p /data
+
+# Crear script para leer el archivo
+COPY readts.sh /usr/local/bin/readts
+RUN chmod +x /usr/local/bin/readts
+
+# Mantener el contenedor vivo para poder entrar
+CMD ["tail", "-f", "/dev/null"]
+

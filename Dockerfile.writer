@@ -1,0 +1,15 @@
+# Dockerfile.writer
+FROM alpine:3.20
+
+# Carpeta donde montaremos el volumen
+RUN mkdir -p /data
+
+# Script que escribe fecha cada 10s y también la imprime a stdout (para ver en docker logs)
+RUN printf '#!/bin/sh\nwhile true; do ts=$(date);\n  echo "$ts" | tee -a /data/timestamp.log;\n  sleep 10;\ndone\n' > /writer.sh \
+  && chmod +x /writer.sh
+
+# Para ver estado (opcional)
+HEALTHCHECK --interval=15s --timeout=3s --retries=3 CMD [ -s /data/timestamp.log ] || exit 1
+
+CMD ["/writer.sh"]
+
